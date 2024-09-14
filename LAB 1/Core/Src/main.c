@@ -166,7 +166,11 @@ void display7SEG(int num){
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	int counter = 0;
+	int counter = 3;
+	int cnt = 0;
+	int red_time = 5;
+	int green_time = 3;
+	int yellow_time = 2;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -195,10 +199,75 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(counter >= 10) counter = 0;
-	   display7SEG(counter++);
-	   HAL_Delay(1000);
+	  switch(cnt) {
+	  	  	  case 0:
+	  	  		  // "-"Ways
+	  	  		  HAL_GPIO_WritePin(LED_R1_GPIO_Port, LED_R1_Pin, GPIO_PIN_SET);
+	  	  		  HAL_GPIO_WritePin(LED_Y1_GPIO_Port, LED_Y1_Pin, GPIO_PIN_SET);
+	  	  		  HAL_GPIO_WritePin(LED_G1_GPIO_Port, LED_G1_Pin, GPIO_PIN_RESET);
+	  	  		  // "|"Ways
+	  	  		  HAL_GPIO_WritePin(LED_R2_GPIO_Port, LED_R2_Pin, GPIO_PIN_RESET);
+	  	  		  HAL_GPIO_WritePin(LED_Y2_GPIO_Port, LED_Y2_Pin, GPIO_PIN_SET);
+	  	  		  HAL_GPIO_WritePin(LED_G2_GPIO_Port, LED_G2_Pin, GPIO_PIN_SET);
+	  	  		  //3000
+	  	  		  break;
+	  	  	  case 1:
+	  	  		  // "-"Ways
+	  	  		  HAL_GPIO_WritePin(LED_R1_GPIO_Port, LED_R1_Pin, GPIO_PIN_SET);
+	  	  		  HAL_GPIO_WritePin(LED_Y1_GPIO_Port, LED_Y1_Pin, GPIO_PIN_RESET);
+	  	  		  HAL_GPIO_WritePin(LED_G1_GPIO_Port, LED_G1_Pin, GPIO_PIN_SET);
+	  	  		  // "|"Ways
+	  	  		  HAL_GPIO_WritePin(LED_R2_GPIO_Port, LED_R2_Pin, GPIO_PIN_RESET);
+	  	  		  HAL_GPIO_WritePin(LED_Y2_GPIO_Port, LED_Y2_Pin, GPIO_PIN_SET);
+	  	  		  HAL_GPIO_WritePin(LED_G2_GPIO_Port, LED_G2_Pin, GPIO_PIN_SET);
+	  	  		  //2000
+	  	  		  break;
+	  	  	  case 2:
+	  	  		  // "-"Ways
+	  	  		  HAL_GPIO_WritePin(LED_R1_GPIO_Port, LED_R1_Pin, GPIO_PIN_RESET);
+	  	  		  HAL_GPIO_WritePin(LED_Y1_GPIO_Port, LED_Y1_Pin, GPIO_PIN_SET);
+	  	  		  HAL_GPIO_WritePin(LED_G1_GPIO_Port, LED_G1_Pin, GPIO_PIN_SET);
+	  	  		  // "|"Ways
+	  	  		  HAL_GPIO_WritePin(LED_R2_GPIO_Port, LED_R2_Pin, GPIO_PIN_SET);
+	  	  		  HAL_GPIO_WritePin(LED_Y2_GPIO_Port, LED_Y2_Pin, GPIO_PIN_SET);
+	  	  		  HAL_GPIO_WritePin(LED_G2_GPIO_Port, LED_G2_Pin, GPIO_PIN_RESET);
+	  	  		  //3000
+	  	  		  break;
+	  	  	  case 3:
+	  	  		  // "-"Ways
+	  	  		  HAL_GPIO_WritePin(LED_R1_GPIO_Port, LED_R1_Pin, GPIO_PIN_RESET);
+	  	  		  HAL_GPIO_WritePin(LED_Y1_GPIO_Port, LED_Y1_Pin, GPIO_PIN_SET);
+	  	  		  HAL_GPIO_WritePin(LED_G1_GPIO_Port, LED_G1_Pin, GPIO_PIN_SET);
+	  	  		  // "|"Ways
+	  	  		  HAL_GPIO_WritePin(LED_R2_GPIO_Port, LED_R2_Pin, GPIO_PIN_SET);
+	  	  		  HAL_GPIO_WritePin(LED_Y2_GPIO_Port, LED_Y2_Pin, GPIO_PIN_RESET);
+	  	  		  HAL_GPIO_WritePin(LED_G2_GPIO_Port, LED_G2_Pin, GPIO_PIN_SET);
+	  	  		  //2000
+	  	  		  break;
+	  	  	  default:
+	  	  		  cnt = 0;
+	  	  		  counter = red_time;
+	  }
+	  if (cnt == 0 && counter >= green_time) {
+		  counter = green_time;
+	  }
+	  else if (cnt == 1 && counter >= yellow_time) {
+		  counter = yellow_time;
+	  }
+	  else if (cnt == 2) {
+		  if (counter - 1 <= yellow_time) cnt++;
+	  }
+	  display7SEG(counter--);
 
+	  if (counter == 0) {
+		  cnt++;
+		  counter = red_time;
+	  }
+	  if (cnt > 3) {
+		  cnt = 0;
+	  }
+
+	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
